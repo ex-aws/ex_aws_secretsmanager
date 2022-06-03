@@ -28,7 +28,7 @@ defmodule ExAws.SecretsManager.Mixfile do
       {:credo, "~> 0.9.1", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 0.5", only: [:dev], runtime: false},
       {:hackney, ">= 0.0.0", only: [:dev, :test]},
-      {:poison, ">= 0.0.0", only: [:dev, :test]},
+      {:jason, ">= 0.0.0", only: [:dev, :test]},
       ex_aws()
     ]
   end
@@ -36,7 +36,7 @@ defmodule ExAws.SecretsManager.Mixfile do
   defp ex_aws() do
     case System.get_env("AWS") do
       "LOCAL" -> {:ex_aws, path: "../ex_aws"}
-      _ -> {:ex_aws, "~> 2.0.0"}
+      _ -> {:ex_aws, "~> 2.2.0"}
     end
   end
 end
