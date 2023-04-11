@@ -86,7 +86,11 @@ defmodule ExAws.SecretsManager do
 
   @doc "List all secrets"
   @type list_secrets_opts :: [
-          {:max_results, integer} | {:next_token, binary}
+          {:max_results, integer}
+          | {:next_token, binary}
+          | {:filters, map}
+          | {:include_planned_deletion, boolean}
+          | {:sort_order, String.t()}
         ]
   @spec list_secrets() :: ExAws.Operation.JSON.t()
   @spec list_secrets(opts :: list_secrets_opts) :: ExAws.Operation.JSON.t()
