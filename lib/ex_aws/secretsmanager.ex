@@ -88,7 +88,7 @@ defmodule ExAws.SecretsManager do
   @type list_secrets_opts :: [
           {:max_results, integer}
           | {:next_token, binary}
-          | {:filters, map}
+          | {:filters, [map()]}
           | {:include_planned_deletion, boolean}
           | {:sort_order, String.t()}
         ]
