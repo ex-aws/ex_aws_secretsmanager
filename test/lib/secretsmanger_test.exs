@@ -131,6 +131,35 @@ defmodule ExAws.SecretsManagerTest do
              ])
   end
 
+  test "List Secrets with filters and sorting" do
+    assert %JSON{
+             data: %{
+               "Filters" => [
+                 %{"Key" => "name", "Values" => ["prod/", "staging/"]},
+                 %{"Key" => "tag-key", "Values" => ["team"]}
+               ],
+               "IncludePlannedDeletion" => true,
+               "MaxResults" => 10,
+               "SortBy" => "name",
+               "SortOrder" => "asc"
+             },
+             headers: [
+               {"x-amz-target", "secretsmanager.ListSecrets"},
+               {"content-type", "application/x-amz-json-1.1"}
+             ]
+           } =
+             SecretsManager.list_secrets(
+               filters: [
+                 [key: "name", values: ["prod/", "staging/"]],
+                 [key: "tag-key", values: ["team"]]
+               ],
+               include_planned_deletion: true,
+               max_results: 10,
+               sort_by: "name",
+               sort_order: "asc"
+             )
+  end
+
   test "List Secret Version Ids" do
     assert %JSON{
              before_request: nil,

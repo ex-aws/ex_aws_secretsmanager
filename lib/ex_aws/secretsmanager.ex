@@ -85,14 +85,21 @@ defmodule ExAws.SecretsManager do
   end
 
   @doc "List all secrets"
+  @type list_secrets_filter :: [{:key, binary} | {:values, list(binary)}]
   @type list_secrets_opts :: [
-          {:max_results, integer} | {:next_token, binary}
+          {:filters, list(list_secrets_filter)}
+          | {:include_planned_deletion, boolean}
+          | {:max_results, integer}
+          | {:next_token, binary}
+          | {:sort_by, binary}
+          | {:sort_order, binary}
         ]
   @spec list_secrets() :: ExAws.Operation.JSON.t()
   @spec list_secrets(opts :: list_secrets_opts) :: ExAws.Operation.JSON.t()
   def list_secrets(opts \\ []) do
     query_params =
       opts
+      |> normalize_list_secrets_filters
       |> normalize_opts
 
     request(:list_secrets, query_params)
@@ -269,5 +276,15 @@ defmodule ExAws.SecretsManager do
     opts
     |> Enum.into(%{})
     |> camelize_keys
+  end
+
+  defp normalize_list_secrets_filters(opts) do
+    case Keyword.fetch(opts, :filters) do
+      {:ok, filters} ->
+        Keyword.put(opts, :filters, Enum.map(filters, &normalize_opts/1))
+
+      :error ->
+        opts
+    end
   end
 end
